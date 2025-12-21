@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Coin Flip Game – Diamond Jackpot</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #3b1c5a, #0b0315);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
+}
+
+.game-box {
+    background: linear-gradient(145deg, #4b2354, #1f0c2b);
+    padding: 35px;
+    border-radius: 20px;
+    width: 360px;
+    text-align: center;
+    box-shadow: 0 0 35px rgba(0,255,255,0.25);
+    transition: transform 1s ease, opacity 1s ease, filter 1s ease;
+}
+
+.game-box.casino-exit {
+    transform: scale(1.4);
+    filter: blur(8px);
+    opacity: 0;
+}
+
+button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 6px;
+}
+
+.choice-btn { background: gold; color: #000; }
+.flip-btn { background: #00e676; }
+.replay-btn { background: #03a9f4; color: #fff; }
+.next-btn {
+    background: linear-gradient(135deg, #00e5ff, #2979ff);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0,229,255,0.9);
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 10px rgba(0,229,255,0.5); }
+    to   { box-shadow: 0 0 30px rgba(0,229,255,1); }
+}
+
+.hidden { display: none; }
+
+/* ===== MAIN COIN ===== */
+.coin-container { perspective: 1000px; }
+
+.coin {
+    width: 90px;
+    height: 90px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1.3s ease-in-out;
+    margin: 20px auto;
+}
+
+.side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    backface-visibility: hidden;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+}
+
+.head {
+    background: radial-gradient(circle, #ffd700, #c9a000);
+    color: #000;
+}
+
+.tail {
+    background: radial-gradient(circle, #e0e0e0, #9e9e9e);
+    color: #000;
+    transform: rotateY(180deg);
+}
+
+/* 💎 DIAMOND COINS */
+.diamond-coin {
+    position: fixed;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at top left,
+        #ffffff,
+        #7ffcff 30%,
+        #00cfff 60%,
+        #0077ff);
+    box-shadow:
+        0 0 12px rgba(0,255,255,0.9),
+        inset 0 0 8px rgba(255,255,255,0.9);
+    pointer-events: none;
+    animation: diamondBurst 1.8s ease-out forwards;
+}
+
+@keyframes diamondBurst {
+    0% {
+        transform: translate(0,0) scale(0.5) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y)) scale(1.1) rotate(1080deg);
+        opacity: 0;
+    }
+}
+
+/* ✨ FLASH */
+.flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,255,255,0.7), transparent 60%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+.flash.show { opacity: 1; }
+
+.result {
+    font-size: 20px;
+    margin: 15px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="flash" id="flash"></div>
+
+<div class="game-box" id="gameBox">
+    <h1>💎 Coin Flip Game</h1>
+
+    <div id="choiceSection">
+        <p>Select HEAD or TAIL</p>
+        <button class="choice-btn" onclick="selectChoice('HEAD')">HEAD</button>
+        <button class="choice-btn" onclick="selectChoice('TAIL')">TAIL</button>
+    </div>
+
+    <div id="flipSection" class="hidden">
+        <div class="coin-container">
+            <div class="coin" id="coin">
+                <div class="side head">HEAD</div>
+                <div class="side tail">TAIL</div>
+            </div>
+        </div>
+        <button class="flip-btn" onclick="flipCoin()">Flip Coin</button>
+    </div>
+
+    <div id="resultSection" class="hidden">
+        <div class="coin-container">
+            <div class="coin" id="resultCoin">
+                <div class="side head">HEAD</div>
+                <div class="side tail">TAIL</div>
+            </div>
+        </div>
+
+        <p class="result" id="resultText"></p>
+
+        <button class="replay-btn" onclick="replayGame()">Replay</button>
+        <button class="next-btn hidden" id="nextBtn" onclick="goNext()">Next Page</button>
+    </div>
+</div>
+
+<script>
+let userChoice = "";
+
+function selectChoice(choice) {
+    userChoice = choice;
+    choiceSection.classList.add("hidden");
+    flipSection.classList.remove("hidden");
+}
+
+function flipCoin() {
+    coin.style.transform = "rotateY(1440deg)";
+
+    setTimeout(() => {
+        const result = Math.random() < 0.5 ? "HEAD" : "TAIL";
+
+        coin.style.transform =
+            result === "HEAD" ? "rotateY(0deg)" : "rotateY(180deg)";
+        resultCoin.style.transform =
+            result === "HEAD" ? "rotateY(0deg)" : "rotateY(180deg)";
+
+        flipSection.classList.add("hidden");
+        resultSection.classList.remove("hidden");
+
+        if (result === userChoice) {
+            resultText.innerHTML = `💎 JACKPOT! Result: <b>${result}</b>`;
+            nextBtn.classList.remove("hidden");
+            diamondBurst();   // 💎💥
+        } else {
+            resultText.innerHTML = `❌ You LOST! Result: <b>${result}</b>`;
+            nextBtn.classList.add("hidden");
+        }
+    }, 1300);
+}
+
+/* 💎 DIAMOND BURST */
+function diamondBurst() {
+    for (let i = 0; i < 28; i++) {
+        const d = document.createElement("div");
+        d.className = "diamond-coin";
+        d.style.left = "50%";
+        d.style.top = "45%";
+        d.style.setProperty("--x", `${(Math.random() - 0.5) * 700}px`);
+        d.style.setProperty("--y", `${Math.random() * 550}px`);
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 1800);
+    }
+}
+
+function replayGame() {
+    userChoice = "";
+    coin.style.transform = "rotateY(0deg)";
+    resultCoin.style.transform = "rotateY(0deg)";
+    nextBtn.classList.add("hidden");
+    resultSection.classList.add("hidden");
+    choiceSection.classList.remove("hidden");
+}
+
+function goNext() {
+    flash.classList.add("show");
+    gameBox.classList.add("casino-exit");
+    setTimeout(() => {
+        window.location.href = "firemessage.html";
+    }, 1200);
+}
+</script>
+
+</body>
+</html>
