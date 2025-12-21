@@ -1,0 +1,227 @@
+/*--------------------------------------------------------------------- 
+File Name: responsive.css 
+---------------------------------------------------------------------*/
+
+@media (min-width: 1343px) and (max-width: 1500px) {
+   
+   
+}
+
+@media (min-width: 1200px) and (max-width: 1342px) {
+    .full_bg { margin: 0 30px 52px 30px;}
+    .slider_main {height: 100%;}
+    .creative h1 {font-size: 61px;}
+    .titlepage h2 {font-size: 32px; line-height: 40px;}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  
+    .site-navbar ul li {
+        padding-right: 57px;
+    }
+       .full_bg { margin: 0 30px 52px 30px; padding: 0 25px 25px 25px;}
+    .slider_main {height: 100%;}
+    .creative h1 {
+    font-size: 52px;
+    line-height: 55px;
+}
+   .titlepage h2 {
+    font-size: 21px;
+    line-height: 29px;
+}
+.combined .titlepage p {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.dicti h4 {font-size: 19px;}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+   
+    .site-navbar ul li {
+        padding-right: 31px;
+    }
+       .full_bg { margin: 0 30px 52px 30px; padding: 0 25px 25px 25px;}
+    .slider_main {height: 100%;}
+    .creative h1 {
+    font-size: 52px;
+    line-height: 55px;
+}
+.perfect_img {
+
+    max-width: 712px;
+    margin: 0 auto;
+    margin-top: 40px;
+
+}
+.clients_banner {padding-top: 30px;}
+.flot_right {float: left !important;}
+.dicti h4 {font-size: 22px;}
+ .grid {
+        display: grid;
+    }
+    .order {
+        order: -1;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .d_none {display: none;}
+    .navbar-area {justify-content: flex-end;}
+    ul.email {padding-right: 25px;}
+        .full_bg {
+    margin: 0 15px 52px 15px;
+    padding: 0 15px 15px 15px;
+}
+    .slider_main {height: 100%;}
+    .creative h1 {
+    font-size: 52px;
+    line-height: 55px;
+}
+.perfect_img {
+
+    max-width: 712px;
+    margin: 0 auto;
+    margin-top: 40px;
+
+}
+.clients_banner {padding-top: 30px;}
+.flot_right {float: left !important;}
+
+ .grid {
+        display: grid;
+    }
+    .order {
+        order: -1;
+    }
+    .dicti {
+    max-width: 505px;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+    /* navbar css for mobile start */
+    .nav-toggler {
+        display: block;
+        position: absolute;
+        left: 45px;
+        z-index: 99999;
+    }
+    .site-navbar {
+        min-height: 60px;
+    }
+    .site-navbar ul {
+        position: absolute;
+        width: 100%;
+        left: 0px;
+        top: 112px;
+        flex-direction: column;
+        align-items: center;
+        background-color: #39b54a;
+        max-height: 0;
+        overflow: hidden;
+        transition: .3s;
+        z-index: 99999;
+        
+    }
+    .site-navbar ul li {
+        width: 100%;
+        text-align: left;
+        padding-right: 0;
+    }
+    .site-navbar ul li a {
+        padding: 25px 25px 0px 25px;
+    }
+    .site-navbar ul.open {
+        max-height: 100vh;
+        padding-bottom: 25px;
+        overflow: visible;
+    }
+    /* navbar css for mobile end */
+}
+
+@media (max-width: 575px) {
+  .d_none {display: none;}
+  .header_top {
+    height: 190px;}
+    .navbar-area {justify-content: flex-end;}
+    ul.email {padding-right: 25px;}
+        .full_bg {
+    margin: 0 5px 52px 5px;
+    padding: 0 5px 5px 5px;
+}
+    .slider_main {height: 100%;}
+.creative h1 {
+    padding-top: 30px;
+    font-size: 38px;
+    line-height: 39px;
+}
+.creative p {
+ 
+    padding: 15px 0 20px 0;
+
+}
+.titlepage h2 {font-size: 27px;
+line-height: 35px;}
+.perfect_img {
+
+    max-width: 712px;
+    margin: 0 auto;
+    margin-top: 40px;
+
+}
+.clients_banner {padding-top: 30px;}
+.flot_right {float: left !important;}
+#myCarousel .carousel-control-prev, #myCarousel .carousel-control-next {width: 70px;}
+ .grid {
+        display: grid;
+    }
+    .order {
+        order: -1;
+    }
+    .dicti {
+    max-width: 505px;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+.dicti h4 {font-size: 19px;}
+    /* navbar css for mobile start */
+    .navbar-area {
+        margin-top: -67px;
+    }
+    .nav-toggler {
+        display: block;
+        position: absolute;
+        left: 45px;
+        z-index: 99999;
+    }
+    .site-navbar {
+        min-height: 60px;
+    }
+    .site-navbar ul {
+        position: absolute;
+        width: 100%;
+        left: 0px;
+        top: 45px;
+        flex-direction: column;
+        align-items: center;
+        background-color: #39b54a;
+        max-height: 0;
+        overflow: hidden;
+        transition: .3s;
+        z-index: 99999;
+        
+    }
+    .site-navbar ul li {
+        width: 100%;
+        text-align: left;
+        padding-right: 0;
+    }
+    .site-navbar ul li a {
+        padding: 25px 25px 0px 25px;
+    }
+    .site-navbar ul.open {
+        max-height: 100vh;
+        padding-bottom: 25px;
+        overflow: visible;
+    }
+}

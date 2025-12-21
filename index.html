@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Fun Time</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" href="css/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+	  <style>
+	  /* FORCE HIDE ON LOAD */
+#binduDropdown {
+    display: none;
+}
+/* DROPDOWN */
+/* ================= DROPDOWN ================= */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;              /* IMPORTANT: hidden by default */
+    position: absolute;
+    top: 45px;
+    left: 0;
+    background: #111;
+    min-width: 220px;
+    border-radius: 10px;
+    z-index: 999;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.dropdown-menu li a {
+    color: #fff;
+    padding: 12px 16px;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-menu li a:hover {
+    background: #ff9800;
+    border-radius: 10px;
+}
+
+/* ================= LOGIN MODAL ================= */
+.login-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.login-box {
+    background: #fff;
+    padding: 25px;
+    width: 300px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+}
+
+.login-box button {
+    padding: 8px 15px;
+    margin: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.login-box .cancel {
+    background: #ccc;
+}
+
+#loginError {
+    color: red;
+    font-size: 14px;
+}
+</style>
+   </head>
+   <!-- body -->
+   <body class="main-layout">
+      <!-- loader  -->
+      <div class="loader_bg">
+         <div class="loader"><img src="images/loading.gif" alt="#"/></div>
+      </div>
+      <!-- end loader -->
+    
+         <!-- header -->
+         <header class="header-area">
+            <div class="container">
+               <div class="row d_flex">
+                 <div class="col-md-12">
+                    <div class="header_top">
+                       <div class="row">
+                          <div class="col-md-4 d_none">
+                              <ul class="top_info">
+                                 <li><i class="fa fa-phone" aria-hidden="true"></i>
+                                  Call : +1 209 68CLONE
+                                 </li>
+                                 <li><i class="fa fa-envelope" aria-hidden="true"></i>
+                                    <a href="Javascript:void(0)">info@clonetab.com</a>
+                                 </li>
+                              </ul>
+                           </div>
+                           <div class=" col-md-4 col-sm-12">
+                              <div class="logo">
+                                 <a href="index.html">CLONETAB</a>
+                              </div>
+                          </div>
+                          <div class="col-md-4 d_none">
+                              <ul class="social_icon text_align_right">
+                              <li><a href="Javascript:void(0)"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                              <li><a href="Javascript:void(0)"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                              <li><a href="Javascript:void(0)"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                              <li><a href="Javascript:void(0)"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                           </ul>
+                          </div>
+                        </div>
+                    </div>
+                 </div>
+                  <div class="col-md-12 col-sm-12">
+                     <div class="navbar-area">
+                        <nav class="site-navbar">
+                           <ul>
+                              <li><a class="active" href="index.html">Home</a></li>
+                              <li><a href="about.html">About</a></li>
+                              <li><a href="blog.html">Blog</a></li>
+                              <li class="dropdown">
+   <a href="javascript:void(0)" onclick="toggleDropdown(event)">
+      Bindu's Tasks <i class="fa fa-caret-down"></i>
+   </a>
+   <ul class="dropdown-menu" id="binduDropdown">
+      <li><a href="#" onclick="openLogin('task1.html')">Task 1</a></li>
+      <li><a href="#" onclick="openLogin('task2.html')">Task 2</a></li>
+      <li><a href="#" onclick="openLogin('task3.html')">Task 3</a></li>
+   </ul>
+</li>
+
+                              <li><a href="https://clonetab.com/">Contact us</a></li>
+                           </ul>
+                           <button class="nav-toggler">
+                           <span></span>
+                           </button>
+                        </nav>
+                        <ul class="email text_align_right">
+                            <li><a href="Javascript:void(0)">Log In</a></li>
+                            <li><a href="Javascript:void(0)"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </header>
+         <!-- end header inner -->
+         <!-- banner -->
+           <div class="full_bg">
+         <div class="slider_main">
+            <!-- carousel code -->
+            <div id="banner1" class="carousel slide">
+               <ol class="carousel-indicators">
+                  <li data-target="#banner1" data-slide-to="0" class="active"></li>
+                  <li data-target="#banner1" data-slide-to="1"></li>
+                  <li data-target="#banner1" data-slide-to="2"></li>
+               </ol>
+               <div class="carousel-inner">
+                  <!-- first slide -->
+                  <div class="carousel-item active">
+                     <div class="container">
+                        <div class="carousel-caption relative">
+                           <div class="row d_flex">
+                              <div class="col-lg-5 offset-lg-7 col-md-7 offset-md-5">
+                                 <div class="creative">
+                                    <h1 class="banner-title">Advanced Happy New Year, Team!</h1>
+                                    <div class="banner-overlay">
+                                    <p class="banner-text">We’re running a light, async New Year Challenge over the next 15 days.
+Tasks are optional, quick (1–2 minutes), and can be done anytime.
+ 
+No impact on work hours — just small check-ins when convenient</p>
+                                       </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>              
+               <!-- controls -->
+               <a class="carousel-control-prev" href="#banner1" role="button" data-slide="prev">
+               <i class="fa fa-angle-left" aria-hidden="true"></i>
+               <span class="sr-only">Previous</span>
+               </a>
+               <a class="carousel-control-next" href="#banner1" role="button" data-slide="next">
+               <i class="fa fa-angle-right" aria-hidden="true"></i>
+               <span class="sr-only">Next</span>
+               </a>
+            </div>
+            </div>
+         </div>
+      </div>
+      <!-- end banner -->
+      <!-- perfect -->
+      <div class="perfect">
+         <div class="container_width">
+            <div class="row d_flex grig">
+               <div class="col-lg-6">
+                  <div class="perfect_img">
+                     <span>15 Dec</span>
+                     <figure><img src="images/perfe1.jpeg" alt="#"/></figure>
+                  </div>
+               </div>
+               <div class="col-lg-6 order">
+                  <div class="titlepage text_align_left">
+                     <h2>Why Fun Thursday Activities Matter in the Workplace</h2>
+                     <p>
+Gone are the days when work was all about deadlines. Today’s best cultures thrive on collaboration, connection, and creativity and that’s exactly what virtual Fun Friday activities or fun Friday games virtual for hybrid teams bring.
+
+When teams take part in Fun Thursday activities for work from home or Fun Thursday activities virtual meeting, they:
+
+Reduce stress and workplace fatigue
+Boost morale and weekly engagement
+Build authentic relationships across teams
+Encourage creative thinking in a relaxed setting
+</p>
+                     <a class="read_more" href="perfect.html">Read More</a>
+                  </div>
+               </div>
+            </div>
+            <div class="row d_flex">
+               <div class="col-lg-6">
+                  <div class="titlepage flot_right text_align_left">
+                     <h2>How to Plan Memorable Fun Thursday Sessions at Work</h2>
+                     <p>Want to keep the energy consistent? Here’s how to make every Fun Thursday activity memorable:
+
+Rotate formats: Mix physical, creative, and trivia games, from Fun Thursday activities in office to Fun Thursday virtual activities.
+Take employee input: Let teams vote on upcoming games; sometimes Fun Thursday email to employees teasers build excitement.
+Set the tone: Use playful subject lines and ideas for virtual Fun Thursday in your invites.
+Keep it short: 30 minutes is enough to energize, not exhaust.
+Celebrate wins: Spotlight MVPs in Fun Thursday virtual games or fun Thursday activities virtual meeting.</p>
+                     <a class="read_more" href="perfect.html">Read More</a>
+                  </div>
+               </div>
+               <div class="col-lg-6">
+                  <div class="perfect_img right_span">
+                     <span>16 Dec</span>
+                     <figure><img src="images/perfe2.jpg" alt="#"/></figure>
+                  </div>
+               </div>
+            </div>
+            <div class="row d_flex grig">
+               <div class="col-lg-6">
+                  <div class="perfect_img">
+                     <span>18 Dec</span>
+                     <figure><img src="images/perfe3.jpg" alt="#"/></figure>
+                  </div>
+               </div>
+               <div class="col-lg-6 order">
+                  <div class="titlepage text_align_left">
+                     <h2>Conclusion</h2>
+                     <p>In today’s fast-paced work world, the smallest rituals strengthen team culture. Fun Thursday activities, whether fun Thursday games in office or fun Thursday activities at work, are more than play, they’re purpose. By mixing fun Thursday virtual activities, fun Thursday activities for employees, and virtual fun Thursday games for office, you keep Thursday energy alive.
+
+Start with one new Fun Thursday game this week. Soon, you’ll have a tradition that teams can’t wait for.</p>
+                     <a class="read_more" href="perfect.html">Read More</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- end perfect -->
+      <!-- combined -->
+      <div class="combined">
+         <div class="clients_bg">
+            <div class="container-fluid">
+               <div class="row d_flex grig">
+                  <div class="col-lg-8">
+                      <!-- start slider section -->
+         <div id="myCarousel" class="carousel slide clients_banner" data-ride="carousel">
+            <ol class="carousel-indicators">
+               <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+               <li data-target="#myCarousel" data-slide-to="1"></li>
+               <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+               <div class="carousel-item active">
+                  <div class="container">
+                     <div class="carousel-caption testimo">
+                       <div class="row d_flex">
+                           <div class="col-md-6">
+                              <div class="dicti">
+                                 <figure><img src="images/perfe3.jpg" alt="#"/></figure>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="dicti">
+                                 <figure><img src="images/blind.jpg" alt="#"/></figure>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="carousel-item">
+                  <div class="container">
+                     <div class="carousel-caption testimo">
+                        <div class="row d_flex">
+                           <div class="col-md-6">
+                              <div class="dicti">
+                                 <figure><img src="images/game1.jpeg" alt="#"/></figure>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="dicti">
+                                 <figure><img src="images/tringle.jpg" alt="#"/></figure>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="carousel-item">
+                  <div class="container">
+                     <div class="carousel-caption testimo">
+                       <div class="row d_flex">
+                           <div class="col-md-6">
+                              <div class="dicti">
+                                 <figure><img src="images/together.jpg" alt="#"/></figure>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="dicti">
+                                 <figure><img src="images/funtime.png" alt="#"/></figure>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            <span class="sr-only">Next</span>
+            </a>
+         </div>
+                  </div>
+                    <div class="col-lg-4 order">
+                     <div class="titlepage text_align_left">
+                        <h2>Why fun office games are worth investing in</h2>
+                        <p>Office games and virtual team building games aren’t just a way to relax (though that’s a worthy goal as well). They provide valuable chances to get to know each other, forge friendships, build trust, and contribute to better employee experiences. Plus, socializing with team members can help account for at least 50% of communication improvements at work.</p>
+                        <a class="read_more" href="#">Read More</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- end combined -->
+       <!-- contact -->
+      <div class="contact">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12 ">
+                  <div class="titlepage text_align_center">
+                     <h2>Contact Us</h2>
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <form id="request" class="main_form">
+                     <div class="row">
+                        <div class="col-md-12 ">
+                           <input class="form_control" placeholder="Name" type="type" name=" Name"> 
+                        </div>
+                        <div class="col-md-12">
+                           <input class="form_control" placeholder="Email" type="type" name="Email"> 
+                        </div>
+                        <div class="col-md-12">
+                           <input class="form_control" placeholder="Phone Number" type="type" name="Phone Number">                          
+                        </div>
+                        <div class="col-md-12">
+                           <input class="textarea" placeholder="Message" type="type" name="message">
+                        </div>
+                        <div class="col-md-12">
+                           <button class="send_btn">Send</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- end contact -->
+      <!--  footer -->
+      <footer>
+         <div class="footer">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-4">
+                           <div class="hedingh3  text_align_left">
+                              <h3>Contact Us</h3>
+                              <ul class="top_infomation">
+                                 <li><img src="images/loc.png" alt="#"/>
+                                    Locations
+                                 </li>
+                                   <li><img src="images/call.png" alt="#"/>
+                                    +71 89078493
+                                 </li>
+                                 <li><img src="images/mail.png" alt="#"/>
+                                    <a href="Javascript:void(0)">demo@gmail.com</a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                        <div class="col-md-4">
+                           <div class="hedingh3 text_align_left">
+                              <h3>Useful Link</h3>
+                              <ul class="menu_footer">
+                                 <li><a href="index.html">Home</a></li>
+                                 <li><a href="about.html">About</a></li>
+                                 <li><a href="blog.html">Blog</a></li>
+                                 <li><a href="service.html">Service</a></li>
+                                 <li><a href="contact.html">Contact</a></li>
+                              </ul>
+                           </div>
+                        </div>
+                        <div class="col-md-4">
+                           <div class="hedingh3  text_align_left">
+                              <h3>Newsletter</h3>
+                              <form id="colof" class="form_subscri">
+                                 <input class="newsl" placeholder="Your email" type="text" name="Email">
+                                 <button class="subsci_btn">Subscribe</button>
+                              </form>
+                           </div>
+                  </div>
+               </div>
+            </div>
+            <div class="copyright">
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <p>© 2025 All Rights Reserved.</a></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!-- end footer -->
+      <!-- Javascript files-->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <script src="js/owl.carousel.min.js"></script>
+      <script src="js/bootstrap-datepicker.min.js"></script>
+      <script src="js/custom.js"></script>
+	  <!-- LOGIN MODAL -->
+<div id="loginModal" class="login-modal">
+   <div class="login-box">
+      <h4>🔐 Login Required</h4>
+
+      <input type="text" id="loginUser" placeholder="Username">
+      <input type="password" id="loginPass" placeholder="Password">
+
+      <p id="loginError"></p>
+
+      <button onclick="checkLogin()">Login</button>
+      <button class="cancel" onclick="closeLogin()">Cancel</button>
+   </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dropdown = document.getElementById("binduDropdown");
+    const modal = document.getElementById("loginModal");
+    let targetPage = "";
+
+    /* ALWAYS HIDE DROPDOWN ON LOAD */
+    if (dropdown) dropdown.style.display = "none";
+
+    /* ---------- DROPDOWN ---------- */
+    window.toggleDropdown = function (event) {
+        event.stopPropagation();
+        dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
+    };
+
+    /* Close dropdown when clicking outside */
+    document.addEventListener("click", function () {
+        if (dropdown) dropdown.style.display = "none";
+    });
+
+    /* Prevent closing when clicking inside dropdown */
+    dropdown?.addEventListener("click", function (e) {
+        e.stopPropagation();
+    });
+
+    /* ---------- LOGIN ---------- */
+    window.openLogin = function (page) {
+        targetPage = page;
+        modal.style.display = "flex";
+    };
+
+    window.closeLogin = function () {
+        modal.style.display = "none";
+        document.getElementById("loginError").innerText = "";
+    };
+
+    window.checkLogin = function () {
+        const user = document.getElementById("loginUser").value;
+        const pass = document.getElementById("loginPass").value;
+
+        if (user === "Bindu" && pass === "Bhavana") {
+            window.location.href = targetPage;
+        } else {
+            document.getElementById("loginError").innerText =
+                "❌ Invalid Username or Password";
+        }
+    };
+
+    /* Prevent modal clicks from closing dropdown */
+    modal?.addEventListener("click", function (e) {
+        e.stopPropagation();
+    });
+
+});
+</script>
+
+   </body>
+</html>
