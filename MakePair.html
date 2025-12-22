@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dinosaur Memory Game</title>
+
+<link href="https://fonts.googleapis.com/css?family=Fredoka+One&text=%3FYOUWON!" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: radial-gradient(circle 448px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);
+  overflow: hidden;
+  perspective: 1200px;
+  font-family: 'Fredoka One', cursive;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(4, 100px);
+  gap: 20px;
+  transform-style: preserve-3d;
+  transform: rotateX(50deg) rotateZ(22deg);
+  user-select: none;
+}
+
+.clone { display: none; }
+
+.cube {
+  position: relative;
+  transform-style: preserve-3d;
+  animation: enter 0.6s ease-out;
+  transition: transform 0.5s ease-out;
+  cursor: pointer;
+}
+
+.cube.flipped,
+.cube.matched {
+  transform: rotateY(180deg);
+  pointer-events: none;
+}
+
+.face {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 2px 1px #fff0d2;
+}
+
+/* FRONT */
+.face.front {
+  background: wheat;
+  transform: translateZ(10px);
+}
+
+.face.front::before {
+  content: "?";
+  font-size: 60px;
+  color: #93794c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* BACK */
+.face.back {
+  background: #fff8e7;
+  transform: rotateY(180deg) translateZ(10px);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80px;
+}
+
+/* TILE IMAGES */
+[data-tile="egg"] .back { background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/62105/dino-egg.svg); }
+[data-tile="dino"] .back { background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/62105/dino-dino1.svg); }
+[data-tile="ahahah"] .back { background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/62105/dino-ah.svg); }
+[data-tile="tri"] .back { background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/62105/dino-tri.svg); }
+[data-tile="ptero"] .back { background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/62105/dino-ptero.svg); }
+[data-tile="erupt"] .back { background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/62105/dino-erupt.svg); }
+
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gameover {
+  background: #fff;
+  border-radius: 120px;
+  border: 12px solid #50b8f7;
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 36px;
+}
+
+.reset {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  background: #fbc300;
+  box-shadow: 0 6px #f2a003;
+  cursor: pointer;
+}
+
+.reset:active {
+  box-shadow: none;
+  transform: translateY(6px);
+}
+
+@keyframes enter {
+  from { transform: scale(0.3) translateZ(-20px); }
+  to { transform: scale(1); }
+}
+
+.btn-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  border: none;
+  border-radius: 50%;
+  background: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn-reset:hover {
+  background: #0056b3;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="board"></div>
+
+<div class="clone">
+  <div class="cube">
+    <div class="face front"></div>
+    <div class="face back"></div>
+  </div>
+</div>
+
+<div class="overlay hidden">
+  <div class="gameover">
+    YOU WON!
+    <button class="reset">↻</button>
+	<br>
+	<div>
+	<a href="PairTest.html" class="btn-reset">Today's Task</a>
+	</div>
+  </div>
+  
+</div>
+
+
+<script>
+const board = document.querySelector('.board');
+const clone = document.querySelector('.clone .cube');
+const overlay = document.querySelector('.overlay');
+const resetBtn = document.querySelector('.reset');
+
+const tiles = ['egg','dino','ahahah','tri','ptero','erupt'];
+
+let first = null;
+let lock = false;
+let matches = 0;
+
+resetBtn.onclick = resetGame;
+
+function resetGame() {
+  board.innerHTML = '';
+  overlay.classList.add('hidden');
+  first = null;
+  matches = 0;
+  lock = false;
+  createBoard();
+}
+
+function createBoard() {
+  const pool = shuffle([...tiles, ...tiles]);
+
+  pool.forEach(type => {
+    const tile = clone.cloneNode(true);
+    tile.dataset.tile = type;
+    tile.addEventListener('click', () => select(tile));
+    board.appendChild(tile);
+  });
+}
+
+function select(tile) {
+  if (lock || tile.classList.contains('flipped')) return;
+
+  tile.classList.add('flipped');
+
+  if (!first) {
+    first = tile;
+    return;
+  }
+
+  lock = true;
+
+  if (first.dataset.tile === tile.dataset.tile) {
+    first.classList.add('matched');
+    tile.classList.add('matched');
+    matches++;
+    lock = false;
+    first = null;
+
+    if (matches === tiles.length) {
+      setTimeout(() => overlay.classList.remove('hidden'), 600);
+    }
+  } else {
+    setTimeout(() => {
+      first.classList.remove('flipped');
+      tile.classList.remove('flipped');
+      first = null;
+      lock = false;
+    }, 800);
+  }
+}
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+createBoard();
+</script>
+
+</body>
+</html>
