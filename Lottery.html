@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gold Lottery Fireworks</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #2b1b00, #000);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  /* 🌌 Particle canvas */
+  #particles, #fireworks {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+  #particles { z-index: 0; }
+  #fireworks { z-index: 10; }
+
+  /* 🎟️ Gold Ticket */
+  .ticket {
+    position: relative;
+    width: 440px;
+    height: 310px;
+    border-radius: 20px;
+    background: linear-gradient(
+      135deg,
+      #f9d976,
+      #f39f00,
+      #fff1a8,
+      #d4af37
+    );
+    box-shadow:
+      0 0 25px rgba(255,215,0,0.9),
+      0 30px 60px rgba(0,0,0,0.9);
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .ticket::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgba(255,255,255,0.6) 50%,
+      transparent 70%
+    );
+    animation: shine 4s infinite;
+  }
+
+  @keyframes shine {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+
+  .content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #5a3a00;
+    text-align: center;
+    padding: 20px;
+    pointer-events: none;
+  }
+
+  .content h2 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .content p {
+    margin: 6px 0;
+    font-weight: 600;
+  }
+
+  #scratch {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+<canvas id="fireworks"></canvas>
+
+<div class="ticket">
+  <div class="content">
+    <h2>🏆 Congratulations! You won today’s task 🏆</h2>
+    <p>Your role: <strong>Camera Person</strong> 📸</p>
+    <p>👉 Take 5 photos of any team member</p>
+    <p>👉 Suggest creative poses while clicking</p>
+  </div>
+  <canvas id="scratch"></canvas>
+</div>
+
+<script>
+/* 🌌 FLOATING PARTICLES */
+const p = document.getElementById("particles");
+const fw = document.getElementById("fireworks");
+const pctx = p.getContext("2d");
+const fwctx = fw.getContext("2d");
+
+function resizeAll() {
+  p.width = fw.width = innerWidth;
+  p.height = fw.height = innerHeight;
+}
+resizeAll();
+window.addEventListener("resize", resizeAll);
+
+const particles = Array.from({ length: 80 }, () => ({
+  x: Math.random() * p.width,
+  y: Math.random() * p.height,
+  dx: (Math.random() - 0.5) * 0.6,
+  dy: (Math.random() - 0.5) * 0.6,
+  r: Math.random() * 2 + 1
+}));
+
+function animateParticles() {
+  pctx.clearRect(0, 0, p.width, p.height);
+  particles.forEach(o => {
+    o.x += o.dx;
+    o.y += o.dy;
+
+    if (o.x < 0) o.x = p.width;
+    if (o.x > p.width) o.x = 0;
+    if (o.y < 0) o.y = p.height;
+    if (o.y > p.height) o.y = 0;
+
+    pctx.beginPath();
+    pctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+    pctx.fillStyle = "rgba(255,215,0,0.7)";
+    pctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+/* 🎟️ SCRATCH CARD */
+const canvas = document.getElementById("scratch");
+const ctx = canvas.getContext("2d");
+
+canvas.width = 440;
+canvas.height = 310;
+
+const foil = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+foil.addColorStop(0, "#cfd3d6");
+foil.addColorStop(1, "#9ea4aa");
+
+ctx.fillStyle = foil;
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.globalCompositeOperation = "destination-out";
+
+let scratching = false;
+let revealed = false;
+
+canvas.addEventListener("mousedown", () => scratching = true);
+canvas.addEventListener("mouseup", () => scratching = false);
+canvas.addEventListener("mouseleave", () => scratching = false);
+
+canvas.addEventListener("mousemove", e => {
+  if (!scratching || revealed) return;
+
+  const r = canvas.getBoundingClientRect();
+  ctx.beginPath();
+  ctx.arc(e.clientX - r.left, e.clientY - r.top, 26, 0, Math.PI * 2);
+  ctx.fill();
+
+  checkScratch();
+});
+
+function checkScratch() {
+  const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  let cleared = 0;
+
+  for (let i = 3; i < data.length; i += 4) {
+    if (data[i] === 0) cleared++;
+  }
+
+  if ((cleared / (canvas.width * canvas.height)) * 100 > 60) {
+    revealWin();
+  }
+}
+
+/* 🎆 FIREWORKS */
+let fireworks = [];
+
+function launchFirework() {
+  const x = Math.random() * fw.width;
+  const y = Math.random() * fw.height * 0.4;
+
+  for (let i = 0; i < 80; i++) {
+    fireworks.push({
+      x,
+      y,
+      dx: (Math.random() - 0.5) * 6,
+      dy: (Math.random() - 0.5) * 6,
+      life: 60,
+      color: `hsl(${Math.random() * 360},100%,50%)`
+    });
+  }
+}
+
+function animateFireworks() {
+  fwctx.clearRect(0, 0, fw.width, fw.height);
+
+  fireworks.forEach(f => {
+    f.x += f.dx;
+    f.y += f.dy;
+    f.dy += 0.05;
+    f.life--;
+
+    fwctx.fillStyle = f.color;
+    fwctx.fillRect(f.x, f.y, 3, 3);
+  });
+
+  fireworks = fireworks.filter(f => f.life > 0);
+  requestAnimationFrame(animateFireworks);
+}
+animateFireworks();
+
+function revealWin() {
+  revealed = true;
+  canvas.style.display = "none";
+  for (let i = 0; i < 6; i++) {
+    setTimeout(launchFirework, i * 400);
+  }
+}
+</script>
+
+</body>
+</html>

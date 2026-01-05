@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cinematic Sequential Text</title>
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700,900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --gradient: linear-gradient(90deg, #ff8a00, #c8305f);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #2a033f;
+}
+
+/* ================= TEXT ================= */
+h1 {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 2.5vw;
+  font-weight: 900;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+h1 span {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+
+  color: transparent;
+  background-image: var(--gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  animation: showHoldHide 5s ease forwards;
+  animation-delay: calc(var(--i) * 5s);
+}
+
+/* Last message stays on screen */
+h1 span:last-child {
+  animation: fadeIn 2s ease forwards;
+  animation-delay: calc(var(--i) * 5s);
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes showHoldHide {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(6);
+  }
+
+  15% {                 /* ENTRY (~1s) */
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  85% {                 /* 👈 HOLD (~5s) */
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  100% {                /* EXIT (~1s) */
+    opacity: 0;
+    transform: translateX(-50%) scale(0.6);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.1);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="text">
+  <span>Get ready</span>
+  <span>(Seriously, get ready. Don’t blink.)</span>
+  <span>You’re about to see something very interesting…</span>
+  <span>(At least, that’s what we’re claiming.)</span>
+  <span>Something you will never forget.</span>
+  <span>(Okay fine… maybe you will.)</span>
+  <span>Your patience is about to be tested.</span>
+  <span>(Relax, no exams today.)</span>
+  <span>The countdown starts now…</span>
+  <span>10</span><span>9</span><span>8</span><span>7</span><span>6</span>
+  <span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+  <span>GO!</span>
+  <span>HAPPY BIRTHDAY TO YOU 🎉</span>
+  <span>Wait… what just happened?</span>
+  <span>🤔🤔🤔🤔</span>
+  <span>Oh… sorry 🙏</span>
+  <span>Today is NOT your birthday.</span>
+  <span>You’re still waiting like a champion 🏆</span>
+  <span>And finally… drumroll 🥁</span>
+  <span>Your task for today:</span>
+  <span>👉 Talk about your favorite</span>
+  <span>movie / web series / actor / singer/ any thing which is your favorite.</span>
+</h1>
+
+<script>
+  // Auto sequence timing
+  document.querySelectorAll("#text span").forEach((span, i) => {
+    span.style.setProperty("--i", i);
+  });
+</script>
+
+</body>
+</html>

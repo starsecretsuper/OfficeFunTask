@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Animated Task + Reactive Particles</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    font-family: "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+
+    background: linear-gradient(270deg, #020617, #0f172a, #020617);
+    background-size: 600% 600%;
+    animation: gradientMove 14s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Grid */
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+}
+
+/* Spotlight */
+body::before {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(56,189,248,0.3), transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(110px);
+    z-index: 0;
+}
+
+canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+/* Task box */
+.task-box {
+    position: relative;
+    z-index: 1;
+    background: rgba(15, 23, 42, 0.96);
+    color: #e5e7eb;
+    padding: 26px 38px;
+    border-radius: 18px;
+    font-size: 22px;
+    max-width: 590px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(56,189,248,0.5);
+
+    opacity: 0;
+    transform: translateY(45px) scale(0.94);
+    transition: all 0.8s ease;
+}
+
+.task-box.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+#text {
+    text-align: left;
+    line-height: 1.6;
+    white-space: pre-line;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.2em;
+    background: #38bdf8;
+    margin-left: 4px;
+    vertical-align: baseline;
+    animation: blink 1s infinite;
+}
+
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="task-box" id="taskBox">
+    <div id="text"></div><span class="cursor"></span>
+</div>
+
+<audio id="typeSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-keyboard-typing-1386.mp3">
+</audio>
+
+<script>
+/* =====================
+   TYPING MESSAGE
+===================== */
+const message = `😂 10 Funny Questions : ask to random team members
+Rule: Answer must be WRONG!
+1️⃣ What is the capital of India?
+2️⃣ What is the most expensive part of a mobile phone?
+3️⃣ Where does the sun rise from? ☀️
+4️⃣ How many days are there in a week?
+5️⃣ What do mosquitoes drink? 🦟
+6️⃣ Who talks the most in a classroom?
+7️⃣ What does the yellow traffic light mean? 🚦
+8️⃣ What is added to tea? ☕
+9️⃣ What is a mobile phone used for? 📱
+🔟 When do humans feel sleepy? 😴
+👉 Rule:
+✔️ Every answer must be completely WRONG
+✔️ Funniest wrong answer wins 🤣`;
+
+
+const textEl = document.getElementById("text");
+const box = document.getElementById("taskBox");
+const sound = document.getElementById("typeSound");
+
+let index = 0;
+setTimeout(() => box.classList.add("show"), 500);
+
+function typeText() {
+    if (index < message.length) {
+        textEl.textContent += message.charAt(index);
+        sound.currentTime = 0;
+        sound.play();
+        index++;
+        setTimeout(typeText, 65);
+    }
+}
+setTimeout(typeText, 1000);
+
+/* =====================
+   PARTICLES SYSTEM
+===================== */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+window.addEventListener("resize", () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+});
+
+const mouse = { x: null, y: null };
+let attractMode = true;
+
+window.addEventListener("mousemove", e => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+});
+
+window.addEventListener("mouseleave", () => {
+    mouse.x = null;
+    mouse.y = null;
+});
+
+/* Burst on click */
+window.addEventListener("click", e => {
+    for (let i = 0; i < 30; i++) {
+        particles.push(new Particle(e.x, e.y, true));
+    }
+});
+
+const colors = ["#38bdf8", "#60a5fa", "#a855f7", "#ec4899", "#22d3ee"];
+
+class Particle {
+    constructor(x, y, burst = false) {
+        this.x = x ?? Math.random() * canvas.width;
+        this.y = y ?? Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+
+        if (burst) {
+            this.speedX = (Math.random() - 0.5) * 6;
+            this.speedY = (Math.random() - 0.5) * 6;
+            this.life = 60;
+        } else {
+            this.speedX = (Math.random() - 0.5) * 1.4;
+            this.speedY = (Math.random() - 0.5) * 1.4;
+            this.life = Infinity;
+        }
+    }
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // Attract mode
+        if (mouse.x && mouse.y) {
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 160) {
+                this.speedX += dx / dist * 0.05;
+                this.speedY += dy / dist * 0.05;
+            }
+        }
+
+        // Wrap
+        if (this.x < 0) this.x = canvas.width;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.y < 0) this.y = canvas.height;
+        if (this.y > canvas.height) this.y = 0;
+
+        if (this.life !== Infinity) this.life--;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+}
+
+const particles = [];
+for (let i = 0; i < 120; i++) {
+    particles.push(new Particle());
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        p.draw();
+
+        if (p.life <= 0) {
+            particles.splice(i, 1);
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>

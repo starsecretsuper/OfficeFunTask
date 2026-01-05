@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Merry Christmas 🎄</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #123a6f, #06162f);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    overflow: hidden;
+}
+
+/* Fireworks canvas */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* Container */
+.container {
+    text-align: center;
+    z-index: 2;
+}
+
+/* Santa */
+.santa {
+    font-size: 120px;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+@keyframes breathe {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Heading */
+h1 {
+    font-size: 48px;
+    margin: 10px 0;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px red; }
+    to { text-shadow: 0 0 25px gold; }
+}
+
+/* Message */
+.message {
+    font-size: 24px;
+    min-height: 32px;
+    transition: opacity 0.6s;
+}
+
+/* Snow */
+.snow {
+    position: absolute;
+    top: -10px;
+    color: white;
+    font-size: 14px;
+    animation: fall linear infinite;
+    z-index: 1;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+    <div class="santa">🎅</div>
+    <h1>🎄 Merry Christmas 🎄</h1>
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+/* ---------- MESSAGES ---------- */
+const messages = [
+    "🎁 Santa is wishing you a Merry Christmas!",
+    "❄️ May your life be filled with joy and peace",
+    "🎄 Warm wishes to you and your family",
+    "✨ May all your dreams come true",
+    "🎅 Ho Ho Ho! Enjoy the Christmas vibes"
+];
+
+let index = 0;
+const msgDiv = document.getElementById("message");
+
+function changeMessage() {
+    msgDiv.style.opacity = 0;
+    setTimeout(() => {
+        msgDiv.textContent = messages[index];
+        msgDiv.style.opacity = 1;
+        index = (index + 1) % messages.length;
+    }, 400);
+}
+
+setInterval(changeMessage, 3000);
+changeMessage();
+
+/* ---------- SNOW ---------- */
+function createSnow() {
+    const snow = document.createElement("div");
+    snow.className = "snow";
+    snow.innerHTML = "❄";
+    snow.style.left = Math.random() * window.innerWidth + "px";
+    snow.style.animationDuration = (4 + Math.random() * 4) + "s";
+    snow.style.fontSize = (10 + Math.random() * 12) + "px";
+    document.body.appendChild(snow);
+
+    setTimeout(() => snow.remove(), 9000);
+}
+setInterval(createSnow, 180);
+
+/* ---------- FIREWORKS ---------- */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.onresize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+};
+
+class Firework {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height;
+        this.targetY = Math.random() * canvas.height / 2;
+        this.speed = 4 + Math.random() * 3;
+        this.exploded = false;
+        this.particles = [];
+    }
+
+    update() {
+        if (!this.exploded) {
+            this.y -= this.speed;
+            if (this.y <= this.targetY) this.explode();
+        } else {
+            this.particles.forEach(p => p.update());
+        }
+    }
+
+    explode() {
+        this.exploded = true;
+        for (let i = 0; i < 40; i++) {
+            this.particles.push(new Particle(this.x, this.y));
+        }
+    }
+
+    draw() {
+        if (!this.exploded) {
+            ctx.fillStyle = "white";
+            ctx.fillRect(this.x, this.y, 2, 10);
+        } else {
+            this.particles.forEach(p => p.draw());
+        }
+    }
+}
+
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.color = `hsl(${Math.random() * 360},100%,60%)`;
+        this.velocity = {
+            x: (Math.random() - 0.5) * 6,
+            y: (Math.random() - 0.5) * 6
+        };
+        this.life = 60;
+    }
+
+    update() {
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+        this.life--;
+    }
+
+    draw() {
+        if (this.life <= 0) return;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+}
+
+const fireworks = [];
+
+function animateFireworks() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (Math.random() < 0.04) {
+        fireworks.push(new Firework());
+    }
+
+    fireworks.forEach((fw, i) => {
+        fw.update();
+        fw.draw();
+        if (fw.exploded && fw.particles.every(p => p.life <= 0)) {
+            fireworks.splice(i, 1);
+        }
+    });
+
+    requestAnimationFrame(animateFireworks);
+}
+
+animateFireworks();
+</script>
+
+</body>
+</html>

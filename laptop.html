@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Laptop on Wooden Desk</title>
+
+<style>
+/* ===== WOODEN DESK BACKGROUND ===== */
+body {
+  margin: 0;
+  height: 100vh;
+  background:
+    linear-gradient(0deg, rgba(0,0,0,0.35), rgba(0,0,0,0.6)),
+    repeating-linear-gradient(
+      90deg,
+      #8b5a2b,
+      #8b5a2b 40px,
+      #7a4a21 40px,
+      #7a4a21 80px
+    );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ===== Laptop ===== */
+.laptop {
+  width: 560px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+}
+
+/* ===== Screen ===== */
+.screen {
+  background: black;
+  height: 320px;
+  border-radius: 14px 14px 0 0;
+  border: 8px solid #2b2b2b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Boot screen */
+.boot {
+  text-align: center;
+}
+
+.logo {
+  font-size: 72px;
+}
+
+.spinner {
+  margin: 18px auto;
+  width: 42px;
+  height: 42px;
+  border: 4px solid #555;
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+/* Messages */
+.message {
+  display: none;
+  font-size: 22px;
+  text-align: center;
+  position: absolute;
+  padding: 0 24px;
+}
+
+/* ===== Laptop Base ===== */
+.base {
+  background: linear-gradient(to bottom, #f5f5f5, #cccccc);
+  border-radius: 0 0 22px 22px;
+  padding: 18px;
+}
+
+/* ===== Keyboard ===== */
+.keyboard {
+  background: #dddddd;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.key {
+  background: #fafafa;
+  color: #444;
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin: 2px;
+  font-size: 12px;
+  box-shadow: inset 0 -3px 0 #b0b0b0;
+  transition: all 0.1s ease;
+}
+
+.key.active {
+  transform: translateY(2px);
+  background: #e0e0e0;
+  box-shadow: inset 0 -1px 0 #b0b0b0;
+}
+
+.key.space { width: 220px; }
+.key.shift { width: 70px; }
+.key.enter { width: 70px; }
+.key.tab { width: 50px; }
+
+/* Touchpad */
+.touchpad {
+  width: 150px;
+  height: 32px;
+  background: linear-gradient(#cfcfcf, #b5b5b5);
+  border-radius: 6px;
+  margin: 12px auto 0;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="laptop">
+  <div class="screen">
+
+    <!-- Boot Screen -->
+    <div class="boot" id="boot">
+      <div class="logo">🪟</div>
+      <div class="spinner"></div>
+      <div class="loading">Starting Windows</div>
+    </div>
+
+    <!-- Messages -->
+    <div class="message">Welcome Bindu👋</div>
+    <div class="message">Your next task</div>
+    <div class="message">
+     Select a teammate and copy their actions for 1 minute.
+    </div>
+
+  </div>
+
+  <!-- Base -->
+  <div class="base">
+    <div class="keyboard">
+
+      <div class="row">
+        <div class="key">Q</div><div class="key">W</div><div class="key">E</div>
+        <div class="key">R</div><div class="key">T</div><div class="key">Y</div>
+        <div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div>
+      </div>
+
+      <div class="row">
+        <div class="key tab">Tab</div>
+        <div class="key">A</div><div class="key">S</div><div class="key">D</div>
+        <div class="key">F</div><div class="key">G</div><div class="key">H</div>
+        <div class="key">J</div><div class="key">K</div><div class="key">L</div>
+        <div class="key enter">Enter</div>
+      </div>
+
+      <div class="row">
+        <div class="key shift">Shift</div>
+        <div class="key">Z</div><div class="key">X</div><div class="key">C</div>
+        <div class="key">V</div><div class="key">B</div><div class="key">N</div>
+        <div class="key">M</div>
+        <div class="key shift">Shift</div>
+      </div>
+
+      <div class="row">
+        <div class="key">Ctrl</div>
+        <div class="key">Alt</div>
+        <div class="key space"></div>
+        <div class="key">Alt</div>
+        <div class="key">Ctrl</div>
+      </div>
+
+    </div>
+
+    <div class="touchpad"></div>
+  </div>
+</div>
+
+<script>
+// Boot -> messages (last stays)
+const boot = document.getElementById("boot");
+const messages = document.querySelectorAll(".message");
+
+setTimeout(() => {
+  boot.style.display = "none";
+  let index = 0;
+
+  function showNext() {
+    if (index > 0 && index < messages.length) {
+      messages[index - 1].style.display = "none";
+    }
+    messages[index].style.display = "block";
+
+    if (index < messages.length - 1) {
+      index++;
+      setTimeout(showNext, 2500);
+    }
+  }
+  showNext();
+}, 5000);
+
+// Keyboard key press animation
+const keys = document.querySelectorAll(".key");
+setInterval(() => {
+  const key = keys[Math.floor(Math.random() * keys.length)];
+  key.classList.add("active");
+  setTimeout(() => key.classList.remove("active"), 150);
+}, 300);
+</script>
+
+</body>
+</html>
